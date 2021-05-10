@@ -52,7 +52,15 @@ TODO
 
 ## LLBLGen Pro 
 
-TODO
+@alert danger
+**Don't do this**. No questions, no buts, no what if's. **Don't do this**. Inlining strings into a query is very dangerous. Don't do that. 
+Additionally, working with unknown schemas is very brittle: you don't know what you'll get, the output can crash your code consuming it. 
+Always know what data you get back, so research the schemas you're working with. There's no valid scenario where you have to work with 
+an 'unknown' schema. 
+@end
+
+@snippet cs [..\Recipes.LLBLGenPro\Recipes\ArbitraryTableRead\ArbitraryTableReadScenario.cs] ArbitraryTableReadScenario
+
 
 ## NHibernate
 

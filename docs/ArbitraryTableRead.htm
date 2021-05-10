@@ -243,7 +243,29 @@
 <h2 id="linq-to-db">LINQ to DB<a class="headerlink" href="#linq-to-db" title="Permalink to this headline"><i class="fa fa-link" aria-hidden="true"></i></a></h2>
 <p>TODO</p>
 <h2 id="llblgen-pro">LLBLGen Pro<a class="headerlink" href="#llblgen-pro" title="Permalink to this headline"><i class="fa fa-link" aria-hidden="true"></i></a></h2>
-<p>TODO</p>
+<div class="alert alert-danger"><span class="alert-title"><i class="fa fa-times-circle"></i> Danger!</span><p><strong>Don't do this</strong>. No questions, no buts, no what if's. <strong>Don't do this</strong>. Inlining strings into a query is very dangerous. Don't do that. 
+Additionally, working with unknown schemas is very brittle: you don't know what you get, the output can crash your code consuming it. 
+Always know what data you get back, so research the schemas you're working with. There's no valid scenario where you have to work with 
+an 'unknown' schema. </p>
+</div><pre><code class="cs">public class ArbitraryTableReadScenario : IArbitraryTableReadScenario&lt;DataTable&gt;
+{
+    public DataTable GetAll(string schema, string tableName)
+    {
+        using(var adapter = new DataAccessAdapter())
+        {
+            using var command = adapter.GetDbSpecificCreatorInstance().CreateCommand(adapter.GetConnection());
+            // Don't do this. Research the schema, then build the code. Inlining input into a query is very dangerous!
+            command.CommandText = $&quot;SELECT * FROM [{schema}].[{tableName}];&quot;;
+            command.Connection!.Open();
+            using var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+            var result = new DataTable();
+            result.Load(reader);
+            return result;
+        }
+    }
+}
+</code></pre>
+
 <h2 id="nhibernate">NHibernate<a class="headerlink" href="#nhibernate" title="Permalink to this headline"><i class="fa fa-link" aria-hidden="true"></i></a></h2>
 <p>TODO</p>
 <h2 id="repodb">RepoDb<a class="headerlink" href="#repodb" title="Permalink to this headline"><i class="fa fa-link" aria-hidden="true"></i></a></h2>
